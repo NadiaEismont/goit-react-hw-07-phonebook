@@ -1,4 +1,7 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/operations';
+import { NotificationManager } from 'react-notifications';
+import { getContacts } from 'redux/selectors';
 import {
   TagForm,
   TagInput,
@@ -8,13 +11,19 @@ import {
 
 export default function ContactForm() {
   const dispatch = useDispatch();
+  const { items: contacts } = useSelector(getContacts);
+
   const handleSubmit = evt => {
     evt.preventDefault();
     const form = evt.currentTarget;
     const name = form.elements.name.value;
     const number = form.elements.number.value;
 
-    dispatch({ type: 'contacts/addContacts', payload: { name, number } });
+    if (contacts.some(contact => contact.name === name)) {
+      return NotificationManager.warning(`${name} is already in contacts`);
+    }
+
+    dispatch(addContact({ name, number }));
     form.reset();
   };
 

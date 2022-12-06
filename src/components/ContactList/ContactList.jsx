@@ -1,9 +1,8 @@
-import { deleteContact } from 'redux/contactsSlice';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ButtonDelete, LabelList, LabelListNumber } from './ContactList.styled';
 import { getFilter, getContacts } from 'redux/selectors';
-import { fetchContacts } from 'redux/operations';
+import { fetchContacts, deleteContact } from 'redux/operations';
 
 const ContactList = () => {
   const dispatch = useDispatch();
@@ -40,7 +39,7 @@ const ContactList = () => {
               <LabelListNumber
                 type="tel"
                 name="number"
-                pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+                // pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
                 title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
                 required
               >

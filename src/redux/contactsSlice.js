@@ -1,11 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { nanoid } from "nanoid";
-import { NotificationManager } from "react-notifications";
-import initialContacts from 'constants/contact';
-import { fetchContacts } from './operations';
+import { fetchContacts, addContact, deleteContact } from './operations';
+import { NotificationManager } from 'react-notifications';
 
-
-// const contactsInitialState = { value: initialContacts };
 
 export const contactsSlice = createSlice({
     name: "contacts",
@@ -13,24 +9,6 @@ export const contactsSlice = createSlice({
         items: [],
         isLoading: false,
         error: null
-    },
-    reducers: {
-        addContacts(state, action) {
-            const { name, number } = action.payload;
-            if (state.value.some(contact => contact.name === name)) {
-                return NotificationManager.warning(`${name} is already in contacts`);
-            }
-
-            return {
-                value: [...state.value, { id: nanoid(), name, number }]
-            };
-        },
-
-        deleteContact(state, action) {
-            return {
-                value: state.value.filter(contact => contact.id !== action.payload)
-            };
-        }
     },
     extraReducers: {
         [fetchContacts.pending](state) {
@@ -45,11 +23,38 @@ export const contactsSlice = createSlice({
             state.isLoading = false;
             state.error = action.payload;
         },
+        [addContact.pending](state) {
+            state.isLoading = true;
+        },
+        [addContact.fulfilled](state, action) {
+            state.isLoading = false;
+            state.error = null;
+            state.items.push(action.payload);
+        },
+        [addContact.rejected](state, action) {
+            state.isLoading = false;
+            state.error = action.payload;
+        },
+
+        [deleteContact.pending](state) {
+            state.isLoading = true;
+        },
+        [deleteContact.fulfilled](state, action) {
+            state.isLoading = false;
+            state.error = null;
+            const index = state.items.findIndex(
+                contact => contact.id === action.payload.id
+            );
+            state.items.splice(index, 1);
+        },
+        [deleteContact.rejected](state, action) {
+            state.isLoading = false;
+            state.error = action.payload.msg;
+            NotificationManager.warning(`${action.payload.contactId} not found`);
+        },
     },
 });
 
 
 
-
-export const { addContacts, deleteContact } = contactsSlice.actions;
 
