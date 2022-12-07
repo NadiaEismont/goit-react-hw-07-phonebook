@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ButtonDelete, LabelList, LabelListNumber } from './ContactList.styled';
 import { getFilter, getContacts } from 'redux/selectors';
 import { fetchContacts, deleteContact } from 'redux/operations';
+import { Loader } from 'components/Spinner/Spinner';
 
 const ContactList = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const ContactList = () => {
 
   return (
     <div>
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <Loader />}
       {error && <p>{error}</p>}
       {contacts && contacts.length > 0 && (
         <ul>

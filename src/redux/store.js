@@ -5,7 +5,7 @@ import { filterSlice } from './filterSlice';
 
 
 
-const enhancer = devToolsEnhancer();
+
 
 export const store = configureStore({
     reducer: {
@@ -14,7 +14,7 @@ export const store = configureStore({
     },
 
 
-}, enhancer)
+})
 
 
 
